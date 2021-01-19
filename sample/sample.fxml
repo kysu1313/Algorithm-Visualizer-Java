@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="737.0" prefWidth="1090.0" stylesheets="@./../styles/Styles.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.Controller">
+   <children>
+      <BorderPane layoutX="462.0" layoutY="269.0" prefHeight="737.0" prefWidth="1090.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <top>
+            <VBox prefHeight="65.0" prefWidth="1090.0" BorderPane.alignment="CENTER">
+               <children>
+                  <MenuBar>
+                    <menus>
+                      <Menu mnemonicParsing="false" text="File">
+                        <items>
+                          <MenuItem mnemonicParsing="false" text="Close" />
+                        </items>
+                      </Menu>
+                      <Menu mnemonicParsing="false" text="Edit">
+                        <items>
+                          <MenuItem mnemonicParsing="false" text="Delete" />
+                        </items>
+                      </Menu>
+                      <Menu mnemonicParsing="false" text="Help">
+                        <items>
+                          <MenuItem mnemonicParsing="false" text="About" />
+                        </items>
+                      </Menu>
+                    </menus>
+                  </MenuBar>
+                  <ToolBar prefHeight="40.0" prefWidth="200.0">
+                    <items>
+                      <Button fx:id="startBtn" mnemonicParsing="false" onAction="#handleStart" text="Start" />
+                        <Button fx:id="clearBtn" mnemonicParsing="false" onAction="#handleClear" text="Clear" />
+                        <ComboBox fx:id="comboBox" onAction="#handleComboBox" prefWidth="150.0" />
+                        <Button fx:id="barBtn" mnemonicParsing="false" onAction="#handleMakeBars" text="Make Bars" />
+                        <Button fx:id="sortBtn" mnemonicParsing="false" onAction="#handleSort" text="Sort" />
+                        <Label text="Animation Speed:" />
+                        <Slider fx:id="scrollBar" />
+                        <Label fx:id="numLabel" mnemonicParsing="false" text="Number of Bars: " />
+                        <TextField fx:id="numBars" accessibleHelp="Set the number of bars to be sorted" prefHeight="25.0" prefWidth="48.0" />
+                    </items>
+                  </ToolBar>
+               </children>
+            </VBox>
+         </top>
+         <left>
+            <VBox prefHeight="672.0" prefWidth="120.0" BorderPane.alignment="CENTER">
+               <children>
+                  <ComboBox prefWidth="150.0" />
+                  <TextField fx:id="textFieldLeft" />
+               </children>
+            </VBox>
+         </left>
+         <center>
+            <TabPane prefHeight="672.0" prefWidth="978.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+              <tabs>
+                <Tab text="Graphs">
+                     <content>
+                        <AnchorPane fx:id="graph" onDragDetected="#onGraphDragDetected" onMouseDragged="#onGraphDragged" onMousePressed="#onGraphPressed" onMouseReleased="#onGraphReleased" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: lightblue;" />
+                     </content>
+                </Tab>
+                <Tab text="Sorting">
+                     <content>
+                        <AnchorPane fx:id="sortGraph" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: lightgreen;" />
+                     </content>
+                </Tab>
+              </tabs>
+            </TabPane>
+         </center></BorderPane>
+   </children>
+</AnchorPane>

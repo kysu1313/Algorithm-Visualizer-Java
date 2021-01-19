@@ -1,0 +1,26 @@
+
+.visNode {
+    -fx-font-size: 15;
+    -fx-font-weight: bold;
+    -fx-padding: 0 5 0 5;
+
+    -fx-background-color: white;
+    -fx-background-radius: 22;
+    -fx-border-color: black;
+    -fx-border-radius: 22;
+}
+
+.arrow {
+    -fx-stroke: purple;
+}
+
+.arrowHead {
+    -fx-stroke: blue;
+    -fx-stroke-width: 3;
+}
+
+.dragged {
+    -fx-stroke: red;
+    -fx-background-color: red;
+    -opacity: 0.4;
+}
