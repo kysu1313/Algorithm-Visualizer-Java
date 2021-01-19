@@ -4,3 +4,6 @@ The sorting algorithms are working properly. The path finding algorithms are sti
 
 Here is an example of Heap Sort: (sorry, I know the flashing is a bit annoying, I'll fix the colors)
 ![](heapSort-smallbar.gif)
+
+Coctail Sort:
+![](coctail-sort.gif)
