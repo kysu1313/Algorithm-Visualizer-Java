@@ -9,6 +9,7 @@
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -57,10 +58,11 @@
             </VBox>
          </top>
          <left>
-            <VBox prefHeight="672.0" prefWidth="120.0" BorderPane.alignment="CENTER">
+            <VBox prefHeight="672.0" prefWidth="146.0" BorderPane.alignment="CENTER">
                <children>
                   <ComboBox prefWidth="150.0" />
                   <TextField fx:id="textFieldLeft" />
+                  <TextArea fx:id="textArea" prefHeight="200.0" prefWidth="200.0" promptText="Algorithm Description" wrapText="true" />
                </children>
             </VBox>
          </left>

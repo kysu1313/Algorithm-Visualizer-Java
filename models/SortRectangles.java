@@ -23,7 +23,7 @@ public class SortRectangles {
     private static double SPACING;
     private static final int BARS = 35;
     private static final int BASE_HEIGHT = 10;
-    private static final int RECT_WIDTH = 15;
+    private static final int RECT_WIDTH = 3; // 15
     private int duration;
 
     public SortRectangles(int _numBars, AnchorPane _grid) {

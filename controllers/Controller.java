@@ -4,6 +4,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -37,6 +38,8 @@ public class Controller implements Initializable {
     private TextField numBars;
     @FXML
     private ComboBox comboBox;
+    @FXML
+    private TextArea textArea;
     private Vertex vertex1;
     private Vertex vertex2;
     private Vertex vertexDelete;
@@ -51,6 +54,7 @@ public class Controller implements Initializable {
             "Heap Sort",
             "Quick Sort"
     );
+    private ObservableMap<String, String> observableMap;
 
 
     // Graph Events
@@ -206,14 +210,17 @@ public class Controller implements Initializable {
             }
             switch (this.selectedSort) {
                 case "Bubble Sort":
+                    this.textArea.setText(this.observableMap.get("Bubble Sort"));
                     this.bsort = new BubbleSort(this.rects, this.sortGraph);
                     this.bsort.sort();
                     break;
                 case "Heap Sort":
+                    this.textArea.setText(this.observableMap.get("Heap Sort"));
                     this.hsort = new HeapSort(this.rects, this.sortGraph);
                     this.hsort.sort();
                     break;
                 case "Quick Sort":
+                    this.textArea.setText(this.observableMap.get("Quick Sort"));
                     this.qsort = new QuickSort(this.rects, this.sortGraph);
                     break;
                 default:
@@ -273,10 +280,19 @@ public class Controller implements Initializable {
         this.comboBox.setOnAction(event);
     }
 
+    private void fillDescriptionMap() {
+        this.observableMap = FXCollections.observableHashMap();
+        this.observableMap.put("Bubble Sort", "Bubble Sort has an average of O(n**2) time complexity");
+        this.observableMap.put("Heap Sort", "Heap Sort has an overall time complexity of O(n*log(n). Heapify is O(log(n)) and build heap is O(n).");
+        this.observableMap.put("Quick Sort", "Quick Sort has average time complexity of O(n*log(n)).");
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         this.scrollBar.setBlockIncrement(10);
+//        this.textArea = new TextArea();
         scrollListener();
+        fillDescriptionMap();
         this.comboBox.getItems().addAll(SORT_OPTIONS);
         comboAction();
     }
