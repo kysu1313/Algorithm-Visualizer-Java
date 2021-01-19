@@ -47,12 +47,14 @@ public class Controller implements Initializable {
     private BubbleSort bsort;
     private HeapSort hsort;
     private QuickSort qsort;
+    private CoctailSort cSort;
     private MyRectangle[] rects;
     private String selectedSort;
     private static final ObservableList<String> SORT_OPTIONS = FXCollections.observableArrayList(
             "Bubble Sort",
             "Heap Sort",
-            "Quick Sort"
+            "Quick Sort",
+            "Coctail Sort"
     );
     private ObservableMap<String, String> observableMap;
 
@@ -223,6 +225,10 @@ public class Controller implements Initializable {
                     this.textArea.setText(this.observableMap.get("Quick Sort"));
                     this.qsort = new QuickSort(this.rects, this.sortGraph);
                     break;
+                case "Coctail Sort":
+                    this.textArea.setText(this.observableMap.get("Coctail Sort"));
+                    this.cSort = new CoctailSort(this.rects, this.sortGraph);
+                    break;
                 default:
                     System.out.println("No sorting algorithm selected");
                     break;
@@ -252,7 +258,11 @@ public class Controller implements Initializable {
             public void changed(ObservableValue<? extends Number> ov,
                                 Number old_val, Number new_val) {
                 if (null != rects) {
-                    MyRectangle.setDuration(2000 / new_val.intValue());
+                    if (new_val.intValue() < 50) {
+                        MyRectangle.setDuration(500 / (new_val.intValue()+1));
+                    } else {
+                        MyRectangle.setDuration(100 / new_val.intValue());
+                    }
                     System.out.println(MyRectangle.getDuration());
                 }
             }
@@ -285,6 +295,7 @@ public class Controller implements Initializable {
         this.observableMap.put("Bubble Sort", "Bubble Sort has an average of O(n**2) time complexity");
         this.observableMap.put("Heap Sort", "Heap Sort has an overall time complexity of O(n*log(n). Heapify is O(log(n)) and build heap is O(n).");
         this.observableMap.put("Quick Sort", "Quick Sort has average time complexity of O(n*log(n)).");
+        this.observableMap.put("Coctail Sort", "Coctail Sort has a worst and average time complexity of O(n**2). Compared to Bubble Sort, Coctail Sort performs better, typically less than two times faster.");
     }
 
     @Override
