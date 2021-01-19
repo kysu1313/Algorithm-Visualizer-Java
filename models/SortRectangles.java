@@ -23,7 +23,7 @@ public class SortRectangles {
     private static double SPACING;
     private static final int BARS = 35;
     private static final int BASE_HEIGHT = 10;
-    private static final int RECT_WIDTH = 3; // 15
+    private static int RECT_WIDTH = 3; // 15
     private int duration;
 
     public SortRectangles(int _numBars, AnchorPane _grid) {
@@ -123,6 +123,7 @@ public class SortRectangles {
         rect.setX((SPACING * _num) + SPACING);
         rect.setY(BASE_HEIGHT); //  (Math.random()*500)+1
         rect.setHeight((Math.random()*(this.grid.getHeight()-20))+BASE_HEIGHT);
+        RECT_WIDTH = (int)SPACING-5;
         rect.setWidth(RECT_WIDTH);
         rect.setFill(_color);
         return rect;
