@@ -17,6 +17,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import models.*;
+import models.blockPath.Grid;
+import models.blockPath.MyNode;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -31,6 +33,8 @@ public class Controller implements Initializable {
     @FXML
     private AnchorPane sortGraph;
     @FXML
+    private AnchorPane grid;
+    @FXML
     private Slider scrollBar;
     @FXML
     private Label numLabel;
@@ -40,6 +44,7 @@ public class Controller implements Initializable {
     private ComboBox comboBox;
     @FXML
     private TextArea textArea;
+
     private Vertex vertex1;
     private Vertex vertex2;
     private Vertex vertexDelete;
@@ -48,14 +53,11 @@ public class Controller implements Initializable {
     private HeapSort hsort;
     private QuickSort qsort;
     private CoctailSort cSort;
+    private InsertionSort iSort;
     private MyRectangle[] rects;
+    private MyNode[][] nodes;
     private String selectedSort;
-    private static final ObservableList<String> SORT_OPTIONS = FXCollections.observableArrayList(
-            "Bubble Sort",
-            "Heap Sort",
-            "Quick Sort",
-            "Coctail Sort"
-    );
+    private boolean isGridActive;
     private ObservableMap<String, String> observableMap;
 
 
@@ -88,6 +90,14 @@ public class Controller implements Initializable {
             this.arrow.getStyleClass().remove("dragged");
         }
         this.vertex2 = null;
+    }
+
+    public void onGridPressed(MouseEvent mouseEvent) {
+
+    }
+
+    public void onGridReleased(MouseEvent mouseEvent) {
+
     }
 
     public void handleClear(ActionEvent event) {
@@ -229,6 +239,10 @@ public class Controller implements Initializable {
                     this.textArea.setText(this.observableMap.get("Coctail Sort"));
                     this.cSort = new CoctailSort(this.rects, this.sortGraph);
                     break;
+                case "Insertion Sort":
+                    this.textArea.setText(this.observableMap.get("Insertion Sort"));
+                    this.iSort = new InsertionSort(this.rects, this.sortGraph);
+                    break;
                 default:
                     System.out.println("No sorting algorithm selected");
                     break;
@@ -238,6 +252,21 @@ public class Controller implements Initializable {
 
     public void handleMakeBars(ActionEvent event) {
         makeBars();
+    }
+
+    public void handleMakeGrid(ActionEvent event) {
+        if (!this.graph.getChildren().isEmpty()) {
+            this.graph.getChildren().clear();
+        }
+        Grid grid = new Grid(40, this.graph);
+        this.nodes = grid.makeGrid();
+
+        for (int i = 0; i < this.nodes.length-1; i++) {
+            for (int j = 0; j < this.nodes[i].length-1; j++) {
+                this.grid.getChildren().add(this.nodes[i][j]);
+            }
+        }
+
     }
 
     private void makeBars() {
@@ -296,15 +325,15 @@ public class Controller implements Initializable {
         this.observableMap.put("Heap Sort", "Heap Sort has an overall time complexity of O(n*log(n). Heapify is O(log(n)) and build heap is O(n).");
         this.observableMap.put("Quick Sort", "Quick Sort has average time complexity of O(n*log(n)).");
         this.observableMap.put("Coctail Sort", "Coctail Sort has a worst and average time complexity of O(n**2). Compared to Bubble Sort, Coctail Sort performs better, typically less than two times faster.");
+        this.observableMap.put("Insertion Sort", "");
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         this.scrollBar.setBlockIncrement(10);
-//        this.textArea = new TextArea();
         scrollListener();
         fillDescriptionMap();
-        this.comboBox.getItems().addAll(SORT_OPTIONS);
+        this.comboBox.getItems().addAll(this.observableMap.keySet());
         comboAction();
     }
 }
