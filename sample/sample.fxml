@@ -45,6 +45,7 @@
                     <items>
                       <Button fx:id="startBtn" mnemonicParsing="false" onAction="#handleStart" text="Start" />
                         <Button fx:id="clearBtn" mnemonicParsing="false" onAction="#handleClear" text="Clear" />
+                        <Button fx:id="makeGridBtn" mnemonicParsing="false" onAction="#handleMakeGrid" text="Make Grid" />
                         <ComboBox fx:id="comboBox" onAction="#handleComboBox" prefWidth="150.0" />
                         <Button fx:id="barBtn" mnemonicParsing="false" onAction="#handleMakeBars" text="Make Bars" />
                         <Button fx:id="sortBtn" mnemonicParsing="false" onAction="#handleSort" text="Sort" />
@@ -60,7 +61,7 @@
          <left>
             <VBox prefHeight="672.0" prefWidth="146.0" BorderPane.alignment="CENTER">
                <children>
-                  <ComboBox prefWidth="150.0" />
+                  <ComboBox fx:id="leftDropDown" prefWidth="150.0" />
                   <TextField fx:id="textFieldLeft" />
                   <TextArea fx:id="textArea" prefHeight="200.0" prefWidth="200.0" promptText="Algorithm Description" wrapText="true" />
                </children>
@@ -79,6 +80,11 @@
                         <AnchorPane fx:id="sortGraph" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: lightgreen;" />
                      </content>
                 </Tab>
+                  <Tab text="Grid">
+                    <content>
+                      <AnchorPane fx:id="grid" onMousePressed="#onGridPressed" onMouseReleased="#onGridReleased" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: white;" />
+                    </content>
+                  </Tab>
               </tabs>
             </TabPane>
          </center></BorderPane>

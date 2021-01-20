@@ -123,7 +123,7 @@ public class SortRectangles {
         rect.setX((SPACING * _num) + SPACING);
         rect.setY(BASE_HEIGHT); //  (Math.random()*500)+1
         rect.setHeight((Math.random()*(this.grid.getHeight()-20))+BASE_HEIGHT);
-        RECT_WIDTH = (int)SPACING-5;
+        RECT_WIDTH = (int)SPACING-1;
         rect.setWidth(RECT_WIDTH);
         rect.setFill(_color);
         return rect;
