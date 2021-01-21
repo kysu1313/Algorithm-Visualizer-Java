@@ -8,6 +8,9 @@ A* Path-Finding Algorithm
 Dijkstra's Shortest Path Algorithm: 
 ![](dijkstra-algo.gif)
 
+Quick Sort Algorithm:
+![](quick-sort-smallbar.gif)
+
 Here is an example of Heap Sort: (sorry, I know the flashing is a bit annoying, I'll fix the colors)
 ![](heapSort-smallbar.gif)
 
