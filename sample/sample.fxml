@@ -59,7 +59,7 @@
             </VBox>
          </top>
          <left>
-            <VBox prefHeight="672.0" prefWidth="146.0" BorderPane.alignment="CENTER">
+            <VBox fx:id="sideVBox" prefHeight="672.0" prefWidth="146.0" BorderPane.alignment="CENTER">
                <children>
                   <ComboBox fx:id="leftDropDown" prefWidth="150.0" />
                   <TextField fx:id="textFieldLeft" />
@@ -68,21 +68,21 @@
             </VBox>
          </left>
          <center>
-            <TabPane prefHeight="672.0" prefWidth="978.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+            <TabPane fx:id="tabPane" prefHeight="672.0" prefWidth="978.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
               <tabs>
-                <Tab text="Graphs">
+                <Tab fx:id="graphTab" text="Graphs">
                      <content>
                         <AnchorPane fx:id="graph" onDragDetected="#onGraphDragDetected" onMouseDragged="#onGraphDragged" onMousePressed="#onGraphPressed" onMouseReleased="#onGraphReleased" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: lightblue;" />
                      </content>
                 </Tab>
-                <Tab text="Sorting">
+                <Tab fx:id="sortTab" text="Sorting">
                      <content>
                         <AnchorPane fx:id="sortGraph" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: lightgreen;" />
                      </content>
                 </Tab>
-                  <Tab text="Grid">
+                  <Tab fx:id="gridTab" text="Grid">
                     <content>
-                      <AnchorPane fx:id="grid" onMousePressed="#onGridPressed" onMouseReleased="#onGridReleased" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: white;" />
+                      <AnchorPane fx:id="grid" minHeight="0.0" minWidth="0.0" onMouseDragged="#onGridDragged" onMouseReleased="#onGridReleased" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: lightyellow;" />
                     </content>
                   </Tab>
               </tabs>

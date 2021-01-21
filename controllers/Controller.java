@@ -10,13 +10,16 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.input.DragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import models.*;
+import models.blockPath.Dijkstras;
 import models.blockPath.Grid;
 import models.blockPath.MyNode;
 
@@ -44,6 +47,18 @@ public class Controller implements Initializable {
     private ComboBox comboBox;
     @FXML
     private TextArea textArea;
+    @FXML
+    private TabPane tabPane;
+    @FXML
+    private Tab graphTab;
+    @FXML
+    private Tab sortTab;
+    @FXML
+    private Tab gridTab;
+    @FXML
+    private VBox sideVBox;
+    @FXML
+    private ComboBox leftDropDown;
 
     private Vertex vertex1;
     private Vertex vertex2;
@@ -56,9 +71,16 @@ public class Controller implements Initializable {
     private InsertionSort iSort;
     private MyRectangle[] rects;
     private MyNode[][] nodes;
+    private MyNode[] flatNodes;
+    private MyNode startNode;
+    private MyNode finishNode;
+    private int rightClickCount;
     private String selectedSort;
     private boolean isGridActive;
     private ObservableMap<String, String> observableMap;
+    private ObservableMap<String, String> observableGridMap;
+
+    private final int GRID_COLS = 30, START_ROW = 5, START_COL = 5, FINISH_ROW = 20, FINISH_COL = 20;
 
 
     // Graph Events
@@ -92,7 +114,12 @@ public class Controller implements Initializable {
         this.vertex2 = null;
     }
 
-    public void onGridPressed(MouseEvent mouseEvent) {
+    public void onGridDragged(MouseEvent mouseEvent) {
+        if (null != this.flatNodes && null != this.grid) {
+            MyNode node = Grid.getNode(this.flatNodes, mouseEvent.getX(), mouseEvent.getY());
+            node.setNodeBackgroundColor("black", "black");
+            node.setWall(true);
+        }
 
     }
 
@@ -106,6 +133,9 @@ public class Controller implements Initializable {
         }
         if (!this.sortGraph.getChildren().isEmpty()) {
             this.sortGraph.getChildren().clear();
+        }
+        if (!this.grid.getChildren().isEmpty()) {
+            this.grid.getChildren().clear();
         }
     }
 
@@ -209,10 +239,17 @@ public class Controller implements Initializable {
     }
 
     public void handleStart(ActionEvent event) throws InterruptedException {
-        System.out.println("start");
-        BinaryTree bTree = new BinaryTree();
+        if (this.tabPane.getSelectionModel().getSelectedItem() == this.gridTab) {
+            if (null == this.nodes) {
+                makeGrid();
+            }
+            Dijkstras djk = new Dijkstras(this.nodes, this.startNode, this.finishNode);
+        } else {
+            System.out.println("start");
+            BinaryTree bTree = new BinaryTree();
+            bTree.createTree( 5, 10, this.graph);
+        }
 
-        bTree.createTree( 5, 10, this.graph);
     }
 
     public void handleSort(ActionEvent event) {
@@ -254,19 +291,57 @@ public class Controller implements Initializable {
         makeBars();
     }
 
-    public void handleMakeGrid(ActionEvent event) {
+    private void makeGrid() {
         if (!this.graph.getChildren().isEmpty()) {
             this.graph.getChildren().clear();
         }
-        Grid grid = new Grid(40, this.graph);
+        Grid grid = new Grid(GRID_COLS, this.graph);
         this.nodes = grid.makeGrid();
+        this.flatNodes = grid.getFlattenedNodes();
+
+        this.startNode = this.nodes[START_ROW-2][START_COL-2];
+        this.startNode.setStart(true);
+        this.finishNode = this.nodes[15][15];
+        this.finishNode.setFinish(true);
 
         for (int i = 0; i < this.nodes.length-1; i++) {
             for (int j = 0; j < this.nodes[i].length-1; j++) {
+                nodeAction(this.nodes[i][j]);
                 this.grid.getChildren().add(this.nodes[i][j]);
             }
         }
+    }
 
+    public void handleMakeGrid(ActionEvent event) {
+        makeGrid();
+    }
+
+    private void nodeAction(MyNode _node) {
+        _node.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                if (_node.isWall()) {
+                    _node.setNodeBackgroundColor("white", "black");
+                } else {
+                    _node.setNodeBackgroundColor("black", "black");
+                }
+                _node.setWall(!_node.isWall());
+            }
+        });
+        _node.setOnDragOver(new EventHandler<DragEvent>() {
+            @Override
+            public void handle(DragEvent dragEvent) {
+                if (_node.isWall()) {
+                    _node.setNodeBackgroundColor("white", "black");
+                } else {
+                    _node.setNodeBackgroundColor("black", "black");
+                }
+                _node.setWall(!_node.isWall());
+
+//                _node.setWall(!_node.isWall());
+//                _node.setNodeBackgroundColor("black", "black");
+            }
+        });
     }
 
     private void makeBars() {
@@ -326,6 +401,9 @@ public class Controller implements Initializable {
         this.observableMap.put("Quick Sort", "Quick Sort has average time complexity of O(n*log(n)).");
         this.observableMap.put("Coctail Sort", "Coctail Sort has a worst and average time complexity of O(n**2). Compared to Bubble Sort, Coctail Sort performs better, typically less than two times faster.");
         this.observableMap.put("Insertion Sort", "");
+
+        this.observableGridMap = FXCollections.observableHashMap();
+        this.observableGridMap.put("Dijkstras", "Dijkstras algorithm has a time complexity of O(V**2) where V is the number of vertices in the graph. If using a binary heap, the time can be reduced to O(E*log(V))");
     }
 
     @Override
@@ -334,6 +412,7 @@ public class Controller implements Initializable {
         scrollListener();
         fillDescriptionMap();
         this.comboBox.getItems().addAll(this.observableMap.keySet());
+        this.leftDropDown.getItems().addAll(this.observableGridMap.keySet());
         comboAction();
     }
 }
