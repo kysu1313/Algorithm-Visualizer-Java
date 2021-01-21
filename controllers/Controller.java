@@ -11,6 +11,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.input.DragEvent;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
@@ -19,11 +20,13 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import models.*;
+import models.blockPath.Astar;
 import models.blockPath.Dijkstras;
 import models.blockPath.Grid;
 import models.blockPath.MyNode;
 
 import java.net.URL;
+import java.security.Key;
 import java.util.ResourceBundle;
 
 import static javafx.scene.paint.Color.BLACK;
@@ -31,6 +34,7 @@ import static javafx.scene.paint.Color.color;
 
 public class Controller implements Initializable {
 
+    public TextField numColumns;
     @FXML
     private AnchorPane graph;
     @FXML
@@ -76,11 +80,13 @@ public class Controller implements Initializable {
     private MyNode finishNode;
     private int rightClickCount;
     private String selectedSort;
+    private String selectedGridSort;
     private boolean isGridActive;
     private ObservableMap<String, String> observableMap;
     private ObservableMap<String, String> observableGridMap;
+    private int cols, rows;
 
-    private final int GRID_COLS = 30, START_ROW = 5, START_COL = 5, FINISH_ROW = 20, FINISH_COL = 20;
+    private final int GRID_COLS = 50, START_ROW = 3, START_COL = 3, FINISH_ROW = 40, FINISH_COL = 40;
 
 
     // Graph Events
@@ -243,7 +249,19 @@ public class Controller implements Initializable {
             if (null == this.nodes) {
                 makeGrid();
             }
-            Dijkstras djk = new Dijkstras(this.nodes, this.startNode, this.finishNode);
+
+            switch (selectedGridSort) {
+                case "Dijkstras":
+                    Dijkstras djk = new Dijkstras(this.nodes, this.startNode, this.finishNode);
+                    break;
+                case "A*":
+                    Astar astar = new Astar(this.nodes, this.startNode, this.finishNode);
+                    break;
+                default:
+                    System.out.println("invalid selection");
+                    break;
+            }
+
         } else {
             System.out.println("start");
             BinaryTree bTree = new BinaryTree();
@@ -291,21 +309,39 @@ public class Controller implements Initializable {
         makeBars();
     }
 
+    private void updateColumns() {
+        EventHandler<ActionEvent> columnEvent = new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                cols = Integer.parseInt(numColumns.getText());
+                makeGrid();
+            }
+        };
+        numColumns.setOnAction(columnEvent);
+//        numColumns.setOnKeyPressed(new EventHandler<KeyEvent>() {
+//            @Override
+//            public void handle(KeyEvent keyEvent) {
+//                cols = Integer.parseInt(numColumns.getText());
+//                makeGrid();
+//            }
+//        });
+    }
+
     private void makeGrid() {
-        if (!this.graph.getChildren().isEmpty()) {
-            this.graph.getChildren().clear();
-        }
-        Grid grid = new Grid(GRID_COLS, this.graph);
+        this.graph.getChildren().clear();
+        Grid grid = new Grid(this.cols, this.graph);
         this.nodes = grid.makeGrid();
         this.flatNodes = grid.getFlattenedNodes();
+        int startRow = 3;
+        int startCol = 3;
 
-        this.startNode = this.nodes[START_ROW-2][START_COL-2];
+        this.startNode = this.nodes[startRow][startCol];
         this.startNode.setStart(true);
-        this.finishNode = this.nodes[15][15];
+        this.finishNode = this.nodes[START_ROW][this.nodes[0].length-2];
         this.finishNode.setFinish(true);
 
-        for (int i = 0; i < this.nodes.length-1; i++) {
-            for (int j = 0; j < this.nodes[i].length-1; j++) {
+        for (int i = 0; i < this.nodes.length; i++) {
+            for (int j = 0; j < this.nodes[i].length; j++) {
                 nodeAction(this.nodes[i][j]);
                 this.grid.getChildren().add(this.nodes[i][j]);
             }
@@ -320,7 +356,16 @@ public class Controller implements Initializable {
         _node.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                if (_node.isWall()) {
+                if (mouseEvent.isSecondaryButtonDown() && !mouseEvent.isPrimaryButtonDown()) {
+                    startNode.setStart(false);
+                    _node.setStart(true);
+                    startNode = _node;
+                    _node.setNodeBackgroundColor("green", "black");
+                }else if (mouseEvent.isPrimaryButtonDown() && mouseEvent.isSecondaryButtonDown()) {
+                    finishNode.setFinish(false);
+                    _node.setFinish(true);
+                    finishNode = _node;
+                } else if (_node.isWall()) {
                     _node.setNodeBackgroundColor("white", "black");
                 } else {
                     _node.setNodeBackgroundColor("black", "black");
@@ -337,9 +382,6 @@ public class Controller implements Initializable {
                     _node.setNodeBackgroundColor("black", "black");
                 }
                 _node.setWall(!_node.isWall());
-
-//                _node.setWall(!_node.isWall());
-//                _node.setNodeBackgroundColor("black", "black");
             }
         });
     }
@@ -357,6 +399,10 @@ public class Controller implements Initializable {
         }
     }
 
+    public void handleRandomize(ActionEvent event) {
+        Grid.randomWalls(this.nodes);
+    }
+
     private void scrollListener() {
         this.scrollBar.valueProperty().addListener(new ChangeListener<Number>() {
             public void changed(ObservableValue<? extends Number> ov,
@@ -364,8 +410,10 @@ public class Controller implements Initializable {
                 if (null != rects) {
                     if (new_val.intValue() < 50) {
                         MyRectangle.setDuration(500 / (new_val.intValue()+1));
+                        Astar.duration = 500 / (new_val.intValue()+1);
                     } else {
                         MyRectangle.setDuration(100 / new_val.intValue());
+                        Astar.duration =100 / new_val.intValue();
                     }
                     System.out.println(MyRectangle.getDuration());
                 }
@@ -388,10 +436,19 @@ public class Controller implements Initializable {
             public void handle(ActionEvent event) {
                 selectedSort = comboBox.getValue().toString();
                 System.out.println(selectedSort);
-                makeBars();
+//                makeBars();
+            }
+        };
+        EventHandler<ActionEvent> gridEvent = new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                selectedGridSort = leftDropDown.getValue().toString();
+                System.out.println(selectedGridSort);
+//                makeGrid();
             }
         };
         this.comboBox.setOnAction(event);
+        this.leftDropDown.setOnAction(gridEvent);
     }
 
     private void fillDescriptionMap() {
@@ -404,13 +461,16 @@ public class Controller implements Initializable {
 
         this.observableGridMap = FXCollections.observableHashMap();
         this.observableGridMap.put("Dijkstras", "Dijkstras algorithm has a time complexity of O(V**2) where V is the number of vertices in the graph. If using a binary heap, the time can be reduced to O(E*log(V))");
+        this.observableGridMap.put("A*", "A* (a-star) algorithm is similar to dijkstras but it uses a heuristic value to direct it's search towards the end node.");
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         this.scrollBar.setBlockIncrement(10);
+        this.cols = 0;
         scrollListener();
         fillDescriptionMap();
+        updateColumns();
         this.comboBox.getItems().addAll(this.observableMap.keySet());
         this.leftDropDown.getItems().addAll(this.observableGridMap.keySet());
         comboAction();

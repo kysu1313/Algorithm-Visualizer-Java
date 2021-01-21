@@ -14,6 +14,7 @@
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="737.0" prefWidth="1090.0" stylesheets="@./../styles/Styles.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.Controller">
@@ -45,7 +46,6 @@
                     <items>
                       <Button fx:id="startBtn" mnemonicParsing="false" onAction="#handleStart" text="Start" />
                         <Button fx:id="clearBtn" mnemonicParsing="false" onAction="#handleClear" text="Clear" />
-                        <Button fx:id="makeGridBtn" mnemonicParsing="false" onAction="#handleMakeGrid" text="Make Grid" />
                         <ComboBox fx:id="comboBox" onAction="#handleComboBox" prefWidth="150.0" />
                         <Button fx:id="barBtn" mnemonicParsing="false" onAction="#handleMakeBars" text="Make Bars" />
                         <Button fx:id="sortBtn" mnemonicParsing="false" onAction="#handleSort" text="Sort" />
@@ -63,6 +63,18 @@
                <children>
                   <ComboBox fx:id="leftDropDown" prefWidth="150.0" />
                   <TextField fx:id="textFieldLeft" />
+                  <HBox prefHeight="25.0" prefWidth="146.0">
+                     <children>
+                        <Button fx:id="randomizeWalls" mnemonicParsing="false" onAction="#handleRandomize" text="Random Walls" />
+                        <Button fx:id="makeGridBtn" mnemonicParsing="false" onAction="#handleMakeGrid" text="Create" />
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="22.0" prefWidth="146.0">
+                     <children>
+                        <Label prefHeight="25.0" prefWidth="127.0" text="Columns: " />
+                        <TextField fx:id="numColumns" promptText="# columns" />
+                     </children>
+                  </HBox>
                   <TextArea fx:id="textArea" prefHeight="200.0" prefWidth="200.0" promptText="Algorithm Description" wrapText="true" />
                </children>
             </VBox>

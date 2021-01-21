@@ -92,7 +92,11 @@ public class MyNode extends Rectangle {
     }
 
     public void setFinish(boolean finish) {
-        this.setNodeBackgroundColor("red", "black");
+        if (finish) {
+            this.setNodeBackgroundColor("red", "black");
+        } else {
+            this.setNodeBackgroundColor("darkgray", "black");
+        }
         isFinish = finish;
     }
 
@@ -101,7 +105,11 @@ public class MyNode extends Rectangle {
     }
 
     public void setStart(boolean start) {
-        this.setNodeBackgroundColor("orange", "black");
+        if (start) {
+            this.setNodeBackgroundColor("green", "black");
+        } else {
+            this.setNodeBackgroundColor("darkgray", "black");
+        }
         isStart = start;
     }
 

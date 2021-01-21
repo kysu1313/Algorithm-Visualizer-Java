@@ -6,6 +6,9 @@ import javafx.scene.paint.Color;
 import java.util.*;
 import java.util.List;
 
+import static models.blockPath.Grid.colorNode;
+import static models.blockPath.Grid.getShortestPath;
+
 public class Dijkstras {
 
     private PriorityQueue<MyNode> pq;
@@ -30,8 +33,7 @@ public class Dijkstras {
         this.visitedNodes = new LinkedList<>();
 
         begin(this.nodes);
-//        this.stran.play();
-        getShortestPath(this.stran).play();
+        getShortestPath(this.stran, this.finishNode, this.duration).play();
 
     }
 
@@ -61,11 +63,12 @@ public class Dijkstras {
             this.unvisitedNodes.remove(closestNode);
 
             // Basically just ignore the node if it's a wall
-            if (closestNode.isWall()) {
+            if (null != closestNode && closestNode.isWall()) {
                 continue;
             }
 
             // If the closest node has max distance, we are stuck and can't proceed;
+            assert closestNode != null;
             if (closestNode.getDistance() == Integer.MAX_VALUE) {
                 return visitedNodes;
             }
@@ -75,7 +78,7 @@ public class Dijkstras {
             visitedNodes.add(closestNode);
 
             // Color nodes as we go
-            colorNode(closestNode, Color.GREEN);
+            colorNode(closestNode, this.startNode, this.finishNode, this.duration, this.stran, Color.GREEN);
 
             // If we're at the end, return;
             if (closestNode == finishNode) {
@@ -96,7 +99,7 @@ public class Dijkstras {
     private void updateUnvisitedNeighbors(MyNode node) {
         PriorityQueue<MyNode> neighbors = getNeighbors(node);
         for (MyNode neighbor : neighbors) {
-            colorNode(neighbor, Color.BLUE);
+            colorNode(neighbor, this.startNode, this.finishNode, this.duration, this.stran, Color.BLUE);
             neighbor.setDistance(node.getDistance()+10);
             neighbor.setParent(node);
         }
@@ -123,23 +126,6 @@ public class Dijkstras {
         return neighbors;
     }
 
-    private void colorNode(MyNode _node, Color _color) {
-        if (_node != this.startNode && _node != this.finishNode && !_node.isWall()) {
-            this.stran.getChildren().add(Grid.createFill(_node, this.duration, Color.GRAY, _color));
-        }
-    }
-
-    private List<MyNode> getNodesInShortestOrder(MyNode _finish) {
-        List<MyNode> shortest = new ArrayList<>();
-        MyNode current = _finish;
-
-        while (current != null) {
-            shortest.add(current);
-            current = current.getMyParent();
-        }
-        return shortest;
-    }
-
     /**
      * Custom comparator to check for the distance value.
      */
@@ -153,14 +139,6 @@ public class Dijkstras {
             }
             return 0;
         }
-    }
-
-    private SequentialTransition getShortestPath(SequentialTransition st) {
-        getNodesInShortestOrder(this.finishNode).forEach(node -> {
-//            colorNode(node, Color.PURPLE);
-            st.getChildren().add(Grid.createFill(node, this.duration, Color.GREEN, Color.PURPLE));
-        });
-        return st;
     }
 
 }
