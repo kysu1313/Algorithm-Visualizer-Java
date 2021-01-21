@@ -37,7 +37,6 @@ public class SortRectangles {
             this.rectangles.add(createRect(i, Color.BLACK));
             this.rectArr[i] = createRect(i, Color.BLACK);
         }
-//        this.grid.getChildren().addAll(this.rectArr);
     }
 
     public SortRectangles(AnchorPane _grid) {
@@ -51,7 +50,6 @@ public class SortRectangles {
             this.rectangles.add(createRect(i, Color.BLACK));
             this.rectArr[i] = createRect(i, Color.BLACK);
         }
-//        this.grid.getChildren().addAll(this.rectArr);
     }
 
     /**
