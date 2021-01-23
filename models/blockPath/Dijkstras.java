@@ -19,9 +19,11 @@ public class Dijkstras {
     private List<MyNode> unvisitedNodes;
     private Comparator<MyNode> distanceComparator;
     private SequentialTransition stran;
+    private boolean horizontals;
     private int duration = 10;
 
-    public Dijkstras(MyNode[][] _nodes, MyNode _start, MyNode _finish) {
+    public Dijkstras(MyNode[][] _nodes, MyNode _start, MyNode _finish, boolean _horizontals) {
+        this.horizontals = _horizontals;
         this.nodes = _nodes;
         this.startNode = _start;
         this.finishNode = _finish;
@@ -117,6 +119,13 @@ public class Dijkstras {
         if (_node.getRow() < this.nodes.length-1) temp.add(this.nodes[_node.getRow()+1][_node.getCol()]);
         if (_node.getCol() > 0) temp.add(this.nodes[_node.getRow()][_node.getCol()-1]);
         if (_node.getCol() < this.nodes[0].length-1) temp.add(this.nodes[_node.getRow()][_node.getCol()+1]);
+
+        if (this.horizontals) {
+            if (_node.getRow() > 0 && _node.getCol() > 0) temp.add(this.nodes[_node.getRow()-1][_node.getCol()-1]);
+            if (_node.getRow() > 0 && _node.getCol() < this.nodes[0].length-1)  temp.add(this.nodes[_node.getRow()-1][_node.getCol()+1]);
+            if (_node.getRow() < this.nodes.length-1 && _node.getCol() > 0)  temp.add(this.nodes[_node.getRow()+1][_node.getCol()-1]);
+            if (_node.getRow() < this.nodes.length-1 && _node.getCol() < this.nodes[0].length-1)  temp.add(this.nodes[_node.getRow()+1][_node.getCol()+1]);
+        }
 
         temp.forEach((node) -> {
             if (!node.isVisited()){

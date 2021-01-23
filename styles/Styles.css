@@ -23,3 +23,7 @@
     -fx-background-color: red;
     -opacity: 0.4;
 }
+
+.label {
+    -fx-font: Comic-Sans;
+}

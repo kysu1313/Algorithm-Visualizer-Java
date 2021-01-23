@@ -20,10 +20,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import models.*;
-import models.blockPath.Astar;
-import models.blockPath.Dijkstras;
-import models.blockPath.Grid;
-import models.blockPath.MyNode;
+import models.blockPath.*;
 
 import java.net.URL;
 import java.security.Key;
@@ -63,6 +60,8 @@ public class Controller implements Initializable {
     private VBox sideVBox;
     @FXML
     private ComboBox leftDropDown;
+    @FXML
+    private CheckBox allowHorizontals;
 
     private Vertex vertex1;
     private Vertex vertex2;
@@ -249,13 +248,19 @@ public class Controller implements Initializable {
             if (null == this.nodes) {
                 makeGrid();
             }
+            boolean horiz = false;
+            if (this.allowHorizontals.isSelected()) {
+                horiz = true;
+            }
 
             switch (selectedGridSort) {
                 case "Dijkstras":
-                    Dijkstras djk = new Dijkstras(this.nodes, this.startNode, this.finishNode);
+                    this.textArea.setText(this.observableGridMap.get("Dijkstras"));
+                    Dijkstras djk = new Dijkstras(this.nodes, this.startNode, this.finishNode, horiz);
                     break;
                 case "A*":
-                    Astar astar = new Astar(this.nodes, this.startNode, this.finishNode);
+                    this.textArea.setText(this.observableGridMap.get("A*"));
+                    Astar astar = new Astar(this.nodes, this.startNode, this.finishNode, horiz);
                     break;
                 default:
                     System.out.println("invalid selection");
@@ -318,13 +323,6 @@ public class Controller implements Initializable {
             }
         };
         numColumns.setOnAction(columnEvent);
-//        numColumns.setOnKeyPressed(new EventHandler<KeyEvent>() {
-//            @Override
-//            public void handle(KeyEvent keyEvent) {
-//                cols = Integer.parseInt(numColumns.getText());
-//                makeGrid();
-//            }
-//        });
     }
 
     private void makeGrid() {
@@ -337,7 +335,7 @@ public class Controller implements Initializable {
 
         this.startNode = this.nodes[startRow][startCol];
         this.startNode.setStart(true);
-        this.finishNode = this.nodes[START_ROW][this.nodes[0].length-2];
+        this.finishNode = this.nodes[this.nodes.length-2][this.nodes[0].length-2];
         this.finishNode.setFinish(true);
 
         for (int i = 0; i < this.nodes.length; i++) {
@@ -349,7 +347,58 @@ public class Controller implements Initializable {
     }
 
     public void handleMakeGrid(ActionEvent event) {
+        if (!this.numColumns.getText().isEmpty()){
+            this.cols = Integer.parseInt(this.numColumns.getText());
+        } else {
+            this.cols = 30;
+        }
         makeGrid();
+    }
+
+    public void handleGenerateVerticalMaze(ActionEvent event) {
+        if (null == this.nodes) {
+            makeGrid();
+        }
+        MazeGenerator maze = new MazeGenerator(this.nodes, this.startNode, this.finishNode);
+        maze.verticalMaze();
+    }
+
+    public void handleGenerateMaze(ActionEvent event) {
+        if (null == this.nodes) {
+            makeGrid();
+        }
+        MazeGenerator maze = new MazeGenerator(this.nodes, this.startNode, this.finishNode);
+    }
+
+    public void handleStartPathFinding(ActionEvent event) {
+        if (this.tabPane.getSelectionModel().getSelectedItem() == this.gridTab) {
+            if (null == this.nodes) {
+                makeGrid();
+            }
+            boolean horiz = false;
+            if (this.allowHorizontals.isSelected()) {
+                horiz = true;
+            }
+
+            switch (selectedGridSort) {
+                case "Dijkstras":
+                    this.textArea.setText(this.observableGridMap.get("Dijkstras"));
+                    Dijkstras djk = new Dijkstras(this.nodes, this.startNode, this.finishNode, horiz);
+                    break;
+                case "A*":
+                    this.textArea.setText(this.observableGridMap.get("A*"));
+                    Astar astar = new Astar(this.nodes, this.startNode, this.finishNode, horiz);
+                    break;
+                default:
+                    System.out.println("invalid selection");
+                    break;
+            }
+
+        } else {
+            System.out.println("start");
+            BinaryTree bTree = new BinaryTree();
+//            bTree.createTree( 5, 10, this.graph);
+        }
     }
 
     private void nodeAction(MyNode _node) {
