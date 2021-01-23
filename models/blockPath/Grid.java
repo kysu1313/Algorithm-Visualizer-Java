@@ -75,6 +75,17 @@ public class Grid {
         return shortest;
     }
 
+    public static boolean gridDoesHaveWalls(MyNode[][] _grid) {
+        for (int i = 0; i < _grid.length; i++) {
+            for (int j = 0; j < _grid[i].length; j++) {
+                if (!_grid[i][j].isWall()) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     static SequentialTransition getShortestPath(SequentialTransition st, MyNode _finishNode, int _duration) {
         getNodesInShortestOrder(_finishNode).forEach(node -> {
             st.getChildren().add(Grid.createFill(node, _duration, Color.GREEN, Color.RED));

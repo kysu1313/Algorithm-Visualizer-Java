@@ -21,9 +21,11 @@ public class Astar {
     private Comparator<MyNode> fScoreComparator;
     private PriorityQueue<MyNode> pq;
     private SequentialTransition stran;
+    private boolean horizontals;
     public static int duration = 1;
 
-    public Astar(MyNode[][] _nodes, MyNode _startNode, MyNode _finishNode) {
+    public Astar(MyNode[][] _nodes, MyNode _startNode, MyNode _finishNode, boolean _horizontals) {
+        this.horizontals = _horizontals;
         this.nodes = _nodes;
         this.startNode = _startNode;
         this.finishNode = _finishNode;
@@ -111,9 +113,16 @@ public class Astar {
         if (_node.getCol() > 0) temp.add(this.nodes[_node.getRow()][_node.getCol()-1]);
         if (_node.getCol() < this.nodes[0].length-1) temp.add(this.nodes[_node.getRow()][_node.getCol()+1]);
 
+        if (this.horizontals) {
+            if (_node.getRow() > 0 && _node.getCol() > 0) temp.add(this.nodes[_node.getRow()-1][_node.getCol()-1]);
+            if (_node.getRow() > 0 && _node.getCol() < this.nodes[0].length-1)  temp.add(this.nodes[_node.getRow()-1][_node.getCol()+1]);
+            if (_node.getRow() < this.nodes.length-1 && _node.getCol() > 0)  temp.add(this.nodes[_node.getRow()+1][_node.getCol()-1]);
+            if (_node.getRow() < this.nodes.length-1 && _node.getCol() < this.nodes[0].length-1)  temp.add(this.nodes[_node.getRow()+1][_node.getCol()+1]);
+        }
+
         temp.forEach((node) -> {
             if (node.isFinish()){
-                System.out.println("hmmmmm");
+                System.out.println("finish node found :)");
             }
             if (!node.isVisited()){
                 neighbors.add(node);

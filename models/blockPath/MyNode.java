@@ -19,9 +19,17 @@ public class MyNode extends Rectangle {
     private double gCost;
     private double hCost;
     private double distance;
+    private boolean east;
+    private boolean west;
+    private boolean north;
+    private boolean south;
+    private boolean isPath;
     private MyNode parent;
     private Color color;
     private String backgroundColor;
+
+    // top 0, right 1, bottom 2, left 3
+    private boolean[] walls = {true, true, true, true};
 
     public MyNode(double _x, double _y, double _width, double _height, int _row, int _col) {
         super(_x, _y, _width, _height);
@@ -35,6 +43,10 @@ public class MyNode extends Rectangle {
         this.isVisited = false;
         this.isStart = false;
         this.isFinish = false;
+        this.east = false;
+        this.west = false;
+        this.north = false;
+        this.south = false;
         this.parent = null;
         this.fCost = 0;
         this.gCost = 0;
@@ -49,6 +61,10 @@ public class MyNode extends Rectangle {
         this.isVisited = false;
         this.isStart = false;
         this.isFinish = false;
+        this.east = false;
+        this.west = false;
+        this.north = false;
+        this.south = false;
         this.parent = null;
         this.fCost = 0;
         this.gCost = 0;
@@ -63,12 +79,83 @@ public class MyNode extends Rectangle {
         this.setStyle("-fx-fill: " + _color + "; -fx-stroke: black; -fx-stroke-width: 1;");
     }
 
+    public void removeWalls(MyNode next) {
+        int x = this.getCol() - next.getCol();
+        // top 0, right 1, bottom 2, left 3
+
+        if(x == 1) {
+            walls[3] = false;
+            next.walls[1] = false;
+        } else if (x == -1) {
+            walls[1] = false;
+            next.walls[3] = false;
+        }
+
+        int y = this.getRow() - next.getRow();
+
+        if(y == 1) {
+            walls[0] = false;
+            next.walls[2] = false;
+        } else if (y == -1) {
+            walls[2] = false;
+            next.walls[0] = false;
+        }
+    }
+
+    public boolean isPath() {
+        return isPath;
+    }
+
+    public void setPath(boolean path) {
+        isPath = path;
+    }
+
+    public boolean[] getWalls() {
+        return walls;
+    }
+
+    public void setWalls(boolean[] walls) {
+        this.walls = walls;
+    }
+
     public String getBackgroundColor() {
         return backgroundColor;
     }
 
     public void setBackgroundColor(String backgroundColor) {
         this.backgroundColor = backgroundColor;
+    }
+
+    public boolean isEast() {
+        return east;
+    }
+
+    public void setEast(boolean east) {
+        this.east = east;
+    }
+
+    public boolean isWest() {
+        return west;
+    }
+
+    public void setWest(boolean west) {
+        this.west = west;
+    }
+
+    public boolean isNorth() {
+        return north;
+    }
+
+    public void setNorth(boolean north) {
+        this.north = north;
+    }
+
+    public boolean isSouth() {
+        return south;
+    }
+
+    public void setSouth(boolean south) {
+        this.south = south;
     }
 
     public int getRow() {

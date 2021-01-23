@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
@@ -16,6 +17,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="737.0" prefWidth="1090.0" stylesheets="@./../styles/Styles.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.Controller">
    <children>
@@ -46,7 +48,7 @@
                     <items>
                       <Button fx:id="startBtn" mnemonicParsing="false" onAction="#handleStart" text="Start" />
                         <Button fx:id="clearBtn" mnemonicParsing="false" onAction="#handleClear" text="Clear" />
-                        <ComboBox fx:id="comboBox" onAction="#handleComboBox" prefWidth="150.0" />
+                        <ComboBox fx:id="comboBox" onAction="#handleComboBox" prefWidth="150.0" promptText="Sorting Algos" />
                         <Button fx:id="barBtn" mnemonicParsing="false" onAction="#handleMakeBars" text="Make Bars" />
                         <Button fx:id="sortBtn" mnemonicParsing="false" onAction="#handleSort" text="Sort" />
                         <Label text="Animation Speed:" />
@@ -61,20 +63,37 @@
          <left>
             <VBox fx:id="sideVBox" prefHeight="672.0" prefWidth="146.0" BorderPane.alignment="CENTER">
                <children>
-                  <ComboBox fx:id="leftDropDown" prefWidth="150.0" />
+                  <ComboBox fx:id="leftDropDown" prefWidth="150.0" promptText="Path-Finding Algos" />
                   <TextField fx:id="textFieldLeft" />
+                  <HBox prefHeight="22.0" prefWidth="146.0">
+                     <children>
+                        <Label prefHeight="25.0" prefWidth="127.0" style="-fx-font-family: Helvetica;" text="  Columns: " />
+                        <TextField fx:id="numColumns" promptText="# columns" />
+                     </children>
+                  </HBox>
                   <HBox prefHeight="25.0" prefWidth="146.0">
                      <children>
                         <Button fx:id="randomizeWalls" mnemonicParsing="false" onAction="#handleRandomize" text="Random Walls" />
                         <Button fx:id="makeGridBtn" mnemonicParsing="false" onAction="#handleMakeGrid" text="Create" />
                      </children>
                   </HBox>
-                  <HBox prefHeight="22.0" prefWidth="146.0">
+                  <Label prefHeight="23.0" prefWidth="146.0" text="            Maze Types: " textAlignment="CENTER" />
+                  <HBox prefHeight="26.0" prefWidth="146.0">
                      <children>
-                        <Label prefHeight="25.0" prefWidth="127.0" text="Columns: " />
-                        <TextField fx:id="numColumns" promptText="# columns" />
+                        <Button fx:id="generateMaze" mnemonicParsing="false" onAction="#handleGenerateMaze" prefHeight="25.0" prefWidth="81.0" text="Default" />
+                        <Button mnemonicParsing="false" onAction="#handleGenerateVerticalMaze" prefHeight="25.0" prefWidth="70.0" text="Vertical" />
                      </children>
                   </HBox>
+                  <HBox prefHeight="25.0" prefWidth="146.0">
+                     <children>
+                        <CheckBox fx:id="allowHorizontals" mnemonicParsing="false" prefHeight="25.0" prefWidth="147.0" text="Allow Horizontals" translateX="9.0" />
+                     </children>
+                  </HBox>
+                  <Button fx:id="startPathFinding" mnemonicParsing="false" onAction="#handleStartPathFinding" prefHeight="25.0" prefWidth="150.0" text="START">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Button>
                   <TextArea fx:id="textArea" prefHeight="200.0" prefWidth="200.0" promptText="Algorithm Description" wrapText="true" />
                </children>
             </VBox>
@@ -92,7 +111,7 @@
                         <AnchorPane fx:id="sortGraph" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: lightgreen;" />
                      </content>
                 </Tab>
-                  <Tab fx:id="gridTab" text="Grid">
+                  <Tab fx:id="gridTab" style="-fx-font-family: Helvetica;" text="Grid">
                     <content>
                       <AnchorPane fx:id="grid" minHeight="0.0" minWidth="0.0" onMouseDragged="#onGridDragged" onMouseReleased="#onGridReleased" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: lightyellow;" />
                     </content>
