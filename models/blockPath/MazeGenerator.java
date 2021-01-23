@@ -54,24 +54,22 @@ public class MazeGenerator {
 
             int rand = lastWall.size() / new Random(5).nextInt();
 
-            divide(tempGrid, 1);
-
             for (int i = 0; i < tempGrid.size(); i++) {
                 int randNum = (int)(Math.ceil(Math.random() * 2));
                 divideArr(this.grid, randNum);
             }
 
-            for (int i = 0; i < this.grid.length; i++) {
-                for (int j = 0; j < this.grid[i].length; j++) {
-                    if (!this.grid[i][j].isStart() && !this.grid[i][j].isFinish()) {
-                        if (i % 2 == 0 && j % 2 != 0) {
-                            this.grid[i][j].setWall(true);
-                        } else if (i % 2 != 0 && j % 2 == 0) {
-                            this.grid[i][j].setWall(true);
-                        }
-                    }
-                }
-            }
+//            for (int i = 0; i < this.grid.length; i++) {
+//                for (int j = 0; j < this.grid[i].length; j++) {
+//                    if (!this.grid[i][j].isStart() && !this.grid[i][j].isFinish()) {
+//                        if (i % 2 == 0 && j % 2 != 0) {
+//                            this.grid[i][j].setWall(true);
+//                        } else if (i % 2 != 0 && j % 2 == 0) {
+//                            this.grid[i][j].setWall(true);
+//                        }
+//                    }
+//                }
+//            }
             count++;
         }
     }
@@ -84,32 +82,45 @@ public class MazeGenerator {
 
     private MyNode[][] divideArr(MyNode[][] grid, int horizVert) {
 
-        int rand1 = (int)(Math.ceil(Math.random() * (grid[0].length-2))+1);
-        int rand2 = (int)(Math.ceil(Math.random() * (grid.length-2))+1);
+//        int rand1 = (int)(Math.ceil(Math.random() * (grid[0].length-3))+1);
+//        int rand2 = (int)(Math.ceil(Math.random() * (grid.length-3))+1);
+        int pathPoint = (int)(Math.ceil(Math.random() * 2));
+
+        Random rand = new Random();
+        // row
+        int rand1 = rand.nextInt((grid[0].length-3)/2) *2;
+        // col
+        int rand2 = rand.nextInt((grid.length-3)/2) *2;
+        int tempRand = 0;
+
         // Vertical Split
         if (horizVert == 1) {
-            int colLen = 0;
+            int colLen = 1;
             for (int i = 0; i < grid[0].length; i++) {
-                if (grid[rand1][i].isWall()) {
-                    grid[rand1][((int)(Math.ceil(Math.random() * colLen)))].setWall(false);
+                if (grid[rand2][i].isWall()) {
+                    tempRand = Math.max(rand.nextInt((colLen + 1) / 2) * 2, 0);
+                    grid[tempRand][rand2].setWall(false);
                     return grid;
                 }
-                grid[rand1][i].setWall(true);
+                grid[rand2][i].setWall(true);
                 colLen++;
             }
-            grid[rand1][((int)(Math.ceil(Math.random() * (grid[rand1].length-1))))].setWall(false);
+            tempRand = Math.max(rand.nextInt((colLen+1)/2) *2, 0);
+            grid[0][rand2].setWall(false);
             // Horizontal Split
         } else if (horizVert == 2) {
-            int rowLen = 0;
+            int rowLen = 1;
             for (int i = 0; i < grid.length; i++) {
-                if (grid[i][rand2].isWall()) {
-                    grid[((int)(Math.ceil(Math.random() * rowLen)))][rand2].setWall(false);
+                if (grid[i][rand1].isWall()) {
+                    tempRand = Math.max(rand.nextInt((rowLen+1)/2) *2, 0); // tempRand = ((int)(Math.ceil(Math.random() * (grid.length-2))));
+                    grid[tempRand][rand1].setWall(false);
                     return grid;
                 }
-                grid[i][rand2].setWall(true);
+                grid[i][rand1].setWall(true);
                 rowLen++;
             }
-            grid[((int)(Math.ceil(Math.random() * (grid.length-1))))][rand2].setWall(false);
+            tempRand = Math.max(rand.nextInt((rowLen+1)/2) *2, 0);
+            grid[0][rand1].setWall(false);  // ((int)(Math.ceil(Math.random() * (grid.length-1))))
         }
         return grid;
     }
