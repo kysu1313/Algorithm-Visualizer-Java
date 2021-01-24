@@ -19,7 +19,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="737.0" prefWidth="1090.0" stylesheets="@./../styles/Styles.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.Controller">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="737.0" prefWidth="1090.0" stylesheets="@./../styles/Styles.css" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.Controller">
    <children>
       <BorderPane layoutX="462.0" layoutY="269.0" prefHeight="737.0" prefWidth="1090.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <top>
@@ -61,27 +61,39 @@
             </VBox>
          </top>
          <left>
-            <VBox fx:id="sideVBox" prefHeight="672.0" prefWidth="146.0" BorderPane.alignment="CENTER">
+            <VBox fx:id="sideVBox" prefHeight="670.0" prefWidth="159.0" BorderPane.alignment="CENTER">
                <children>
-                  <ComboBox fx:id="leftDropDown" prefWidth="150.0" promptText="Path-Finding Algos" />
+                  <ComboBox fx:id="leftDropDown" prefHeight="26.0" prefWidth="172.0" promptText="Path-Finding Algos" />
                   <TextField fx:id="textFieldLeft" />
                   <HBox prefHeight="22.0" prefWidth="146.0">
                      <children>
-                        <Label prefHeight="25.0" prefWidth="127.0" style="-fx-font-family: Helvetica;" text="  Columns: " />
+                        <Label prefHeight="25.0" prefWidth="168.0" style="-fx-font-family: Helvetica;" text="  Columns: " />
                         <TextField fx:id="numColumns" promptText="# columns" />
                      </children>
                   </HBox>
                   <HBox prefHeight="25.0" prefWidth="146.0">
                      <children>
-                        <Button fx:id="randomizeWalls" mnemonicParsing="false" onAction="#handleRandomize" text="Random Walls" />
-                        <Button fx:id="makeGridBtn" mnemonicParsing="false" onAction="#handleMakeGrid" text="Create" />
+                        <Button fx:id="randomizeWalls" mnemonicParsing="false" onAction="#handleRandomize" prefHeight="23.0" prefWidth="103.0" text="Random Walls">
+                           <font>
+                              <Font size="12.0" />
+                           </font></Button>
+                        <Button fx:id="makeGridBtn" mnemonicParsing="false" onAction="#handleMakeGrid" prefHeight="23.0" prefWidth="58.0" text="Create">
+                           <font>
+                              <Font size="12.0" />
+                           </font></Button>
                      </children>
                   </HBox>
                   <Label prefHeight="23.0" prefWidth="146.0" text="            Maze Types: " textAlignment="CENTER" />
                   <HBox prefHeight="26.0" prefWidth="146.0">
                      <children>
-                        <Button fx:id="generateMaze" mnemonicParsing="false" onAction="#handleGenerateMaze" prefHeight="25.0" prefWidth="81.0" text="Default" />
-                        <Button mnemonicParsing="false" onAction="#handleGenerateVerticalMaze" prefHeight="25.0" prefWidth="70.0" text="Vertical" />
+                        <Button fx:id="generateMaze" mnemonicParsing="false" onAction="#handleGenerateMaze" prefHeight="25.0" prefWidth="81.0" text="Default">
+                           <font>
+                              <Font size="12.0" />
+                           </font></Button>
+                        <Button mnemonicParsing="false" onAction="#handleGenerateVerticalMaze" prefHeight="25.0" prefWidth="78.0" text="Vertical">
+                           <font>
+                              <Font size="12.0" />
+                           </font></Button>
                      </children>
                   </HBox>
                   <HBox prefHeight="25.0" prefWidth="146.0">
@@ -89,7 +101,7 @@
                         <CheckBox fx:id="allowHorizontals" mnemonicParsing="false" prefHeight="25.0" prefWidth="147.0" text="Allow Horizontals" translateX="9.0" />
                      </children>
                   </HBox>
-                  <Button fx:id="startPathFinding" mnemonicParsing="false" onAction="#handleStartPathFinding" prefHeight="25.0" prefWidth="150.0" text="START">
+                  <Button fx:id="startPathFinding" mnemonicParsing="false" onAction="#handleStartPathFinding" prefHeight="28.0" prefWidth="162.0" text="START">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font>
@@ -103,7 +115,7 @@
               <tabs>
                 <Tab fx:id="graphTab" text="Graphs">
                      <content>
-                        <AnchorPane fx:id="graph" onDragDetected="#onGraphDragDetected" onMouseDragged="#onGraphDragged" onMousePressed="#onGraphPressed" onMouseReleased="#onGraphReleased" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: lightblue;" />
+                        <AnchorPane fx:id="graph" onDragDetected="#onGraphDragDetected" onMouseDragged="#onGraphDragged" onMousePressed="#onGraphPressed" onMouseReleased="#onGraphReleased" prefHeight="637.0" prefWidth="928.0" style="-fx-background-color: lightblue;" />
                      </content>
                 </Tab>
                 <Tab fx:id="sortTab" text="Sorting">
