@@ -86,7 +86,8 @@ public class MazeGenerator {
             if (neighbor != null) {
                 neighbor.setVisited(true);
                 this.stack.push(current);
-                clearPath(neighbor);
+                this.getWallBetween(current, neighbor);
+//                clearPath(neighbor);
 //                MyNode wall = getWallBetween(current, neighbor);
 //                assert wall != null;
 //                wall.setWall(true);
@@ -167,63 +168,80 @@ public class MazeGenerator {
         if (node.isWest()) node.setWest(false);
     }
 
-    public void generate() {
-        MyNode current = this.unvisitedNodes.get((int)(Math.random()*this.unvisitedNodes.size()));
-        current.setWall(true);
-        current.setVisited(true);
-        current.setFill(Color.BLACK);
-//        this.tempStart = null;
-//        this.tempFinish = null;
+    private void getWallBetween(MyNode n1, MyNode n2) {
 
-        while (!this.unvisitedNodes.isEmpty()) {
-            if (unvisitedNodes.size() == 1) {
-//                tempFinish = unvisitedNodes.get(0);
-            }
-            MyNode neighbor = this.getNeighbor(current);
-//            MyNode secondNeighbor = this.getNeighbor(neighbor);
+        int x1 = n1.getCol();
+        int y1 = n1.getRow();
 
-            if (neighbor != null) {
-                this.stack.push(current);
-                MyNode wall = getWallBetween(current, neighbor);
-                assert wall != null;
-                wall.setWall(true);
-                wall.setVisited(true);
-                wall.setFill(Color.BLACK);
+        int x2 = n2.getCol();
+        int y2 = n2.getRow();
 
-                this.unvisitedNodes.remove(wall);
-                colorNode(neighbor, this.startNode, this.finishNode, duration, this.stran, Color.BLUE);
-                current = neighbor;
-                current.setWall(false);
-                current.setVisited(true);
-                current.setFill(Color.BLACK);
+        int x = x1 - x2;
+        int y = y1 - y2;
 
-                unvisitedNodes.remove(current);
-            } else if (!this.stack.isEmpty()) {
-                current = this.stack.pop();
-            } else {
-                current = this.unvisitedNodes.remove((int)(Math.random()*this.unvisitedNodes.size()));
-                current.setWall(false);
-                current.setVisited(false);
-            }
+        if (x == 2) {
+            this.grid[x1-1][y1].setWall(false);
+        } else if (x == -2) {
+            this.grid[x1+1][y1].setWall(false);
+        } else if (y == 2) {
+            this.grid[x1][y1-1].setWall(false);
+        } else if (y == -2) {
+            this.grid[x1][y1-1].setWall(false);
         }
-        this.stran.play();
-
-    }
-
-    private MyNode getWallBetween(MyNode n1, MyNode n2) {
-        int x = n1.getCol() - n2.getCol();
-        int y = n1.getRow() - n2.getRow();
 //        if (x != 0 && y != 0) {
 //            return null;
 //        }
-        x = n2.getCol() + (x/2) - 1;
-        y = n2.getRow() + (y/1) - 1;
-        if (this.grid.length-1 > x && this.grid[0].length-1 > y && x >= 0 && y >= 0) {
-            return this.grid[x][y];
-        } else {
-            return n1;
-        }
+//        x = n2.getCol() + (x/2) - 1;
+//        y = n2.getRow() + (y/1) - 1;
+//        if (this.grid.length-1 > x && this.grid[0].length-1 > y && x >= 0 && y >= 0) {
+//            return this.grid[x][y];
+//        } else {
+//            return n1;
+//        }
     }
+
+//    public void generate() {
+//        MyNode current = this.unvisitedNodes.get((int)(Math.random()*this.unvisitedNodes.size()));
+//        current.setWall(true);
+//        current.setVisited(true);
+//        current.setFill(Color.BLACK);
+////        this.tempStart = null;
+////        this.tempFinish = null;
+//
+//        while (!this.unvisitedNodes.isEmpty()) {
+//            if (unvisitedNodes.size() == 1) {
+////                tempFinish = unvisitedNodes.get(0);
+//            }
+//            MyNode neighbor = this.getNeighbor(current);
+////            MyNode secondNeighbor = this.getNeighbor(neighbor);
+//
+//            if (neighbor != null) {
+//                this.stack.push(current);
+//                MyNode wall = getWallBetween(current, neighbor);
+//                assert wall != null;
+//                wall.setWall(true);
+//                wall.setVisited(true);
+//                wall.setFill(Color.BLACK);
+//
+//                this.unvisitedNodes.remove(wall);
+//                colorNode(neighbor, this.startNode, this.finishNode, duration, this.stran, Color.BLUE);
+//                current = neighbor;
+//                current.setWall(false);
+//                current.setVisited(true);
+//                current.setFill(Color.BLACK);
+//
+//                unvisitedNodes.remove(current);
+//            } else if (!this.stack.isEmpty()) {
+//                current = this.stack.pop();
+//            } else {
+//                current = this.unvisitedNodes.remove((int)(Math.random()*this.unvisitedNodes.size()));
+//                current.setWall(false);
+//                current.setVisited(false);
+//            }
+//        }
+//        this.stran.play();
+//
+//    }
 
     private boolean chooseOrientation(int width, int height) {
         if (width < height) return true;
