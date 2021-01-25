@@ -5,6 +5,9 @@ The sorting algorithms are working properly. The path finding algorithms are sti
 A* Path-Finding Algorithm
 ![](astar-algo-smallgrid.gif)
 
+Recursive DFS Maze Generation
+![](recursive-maze-generation.gif)
+
 Dijkstra's Shortest Path Algorithm: 
 ![](dijkstra-algo.gif)
 
