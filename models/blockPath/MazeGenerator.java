@@ -25,7 +25,7 @@ public class MazeGenerator {
     private MyNode tempStart;
     private SequentialTransition stran;
     private SequentialTransition postStran;
-    private int duration = 8;
+    public static int duration = 8;
 
     public MazeGenerator(MyNode[][] _grid, MyNode _startNode, MyNode _finishNode, boolean _type) {
         this.grid = _grid;
@@ -54,6 +54,10 @@ public class MazeGenerator {
         }
     }
 
+    /**
+     * Creates a grid of every other node.
+     * This is used to create "walls" between nodes.
+     */
     public void makeMaze() {
 
             for (int i = 0; i < this.grid.length; i++) {
@@ -76,6 +80,9 @@ public class MazeGenerator {
         }
     }
 
+    /**
+     * Clears the color off of the nodes, replacing it with black / gray.
+     */
     private void cleanNodes() {
         this.duration = 3;
         for (int i = 0; i < this.grid.length; i++) {
@@ -90,6 +97,9 @@ public class MazeGenerator {
         }
     }
 
+    /**
+     * Fills in the walls after coloring animation.
+     */
     private void fillWalls() {
         for (int i = 0; i < this.grid.length; i++) {
             for (int j = 0; j < this.grid[i].length; j++) {
@@ -100,6 +110,9 @@ public class MazeGenerator {
         }
     }
 
+    /**
+     * Iterative function that generates the maze.
+     */
     private void start() {
 
         MyNode current = this.grid[1][1];
@@ -124,7 +137,7 @@ public class MazeGenerator {
     }
 
     /**
-     * Get the neighbors of a node;
+     * Get the unvisited neighbors of a node;
      * @param _node
      * @return
      */
@@ -160,6 +173,11 @@ public class MazeGenerator {
         return neighbors.get((int) (Math.floor(Math.random() * (neighbors.size()))));
     }
 
+    /**
+     * Finds the wall between two nodes and removes it.
+     * @param n1
+     * @param n2
+     */
     private void getWallBetween(MyNode n1, MyNode n2) {
 
         n1.setVisited(true);
@@ -188,18 +206,6 @@ public class MazeGenerator {
         }
     }
 
-    private List<List<MyNode>> getlistNodes(MyNode[][] grid) {
-        List<List<MyNode>> list = new ArrayList<>();
-        for (MyNode[] inner : grid) {
-            List<MyNode> tmp = new ArrayList<>();
-            for (MyNode node : inner) {
-                tmp.add(node);
-            }
-            list.add(tmp);
-        }
-        return list;
-    }
-
     /**
      * This creates random walls
      * Note: not guaranteed to have a path. Expecially on smaller grids.
@@ -223,6 +229,11 @@ public class MazeGenerator {
         }
     }
 
+    /**
+     * Returns a linked list of all nodes.
+     * @param _grid
+     * @return
+     */
     private List<MyNode> getNodes(MyNode[][] _grid) {
         List<MyNode> temp = new LinkedList<>();
         for (int i = 0; i < _grid.length; i++) {
