@@ -463,9 +463,11 @@ public class Controller implements Initializable {
                     if (new_val.intValue() < 50) {
                         MyRectangle.setDuration(500 / (new_val.intValue()+1));
                         Astar.duration = 500 / (new_val.intValue()+1);
+                        MazeGenerator.duration = 500 / (new_val.intValue()+1);
                     } else {
                         MyRectangle.setDuration(100 / new_val.intValue());
                         Astar.duration =100 / new_val.intValue();
+                        MazeGenerator.duration = 100 / new_val.intValue();
                     }
                     System.out.println(MyRectangle.getDuration());
                 }
