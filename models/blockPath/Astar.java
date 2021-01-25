@@ -81,8 +81,6 @@ public class Astar {
                     } else {
                         neighbor.setgCost(tempG);
                         neighbor.setVisited(true);
-//                        neighbor.setFill(Color.BLUE);
-//                        neighbor.setNodeBackgroundColor("blue", "black");
                         colorNode(neighbor, this.startNode, this.finishNode, duration, this.stran, Color.YELLOW);
                         this.openSet.add(neighbor);
                     }

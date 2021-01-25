@@ -4,6 +4,7 @@ import javafx.animation.FillTransition;
 import javafx.animation.SequentialTransition;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 
@@ -12,6 +13,7 @@ import java.awt.event.ActionListener;
 import java.util.*;
 import java.util.List;
 
+import static models.blockPath.Grid.colorMazeNode;
 import static models.blockPath.Grid.colorNode;
 
 public class MazeGenerator {
@@ -22,8 +24,9 @@ public class MazeGenerator {
     private MyNode current, startNode, finishNode;
     private MyNode tempStart;
     private SequentialTransition stran;
+    private SequentialTransition postStran;
     private AnchorPane graph;
-    private int duration = 100;
+    private int duration = 15;
 
     public MazeGenerator(MyNode[][] _grid, MyNode _startNode, MyNode _finishNode, AnchorPane grid) {
         this.grid = _grid;
@@ -34,19 +37,20 @@ public class MazeGenerator {
         this.unvisitedNodes = getNodes(this.grid);
         this.stack = new Stack<>();
         this.stran = new SequentialTransition();
+        this.postStran = new SequentialTransition();
         this.tempStart = this.grid[0][0];
 
         makeMaze();
         start();
-//        DFSGenerator();
-//        generate();
+        cleanNodes();
+        this.stran.play();
+        this.stran.setOnFinished(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                fillWalls();
+            }
+        });
     }
-
-//    public void make(int x, int y) {
-//        if (step(x, y)) {
-//
-//        }
-//    }
 
     public void makeMaze() {
 
@@ -54,90 +58,60 @@ public class MazeGenerator {
                 for (int j = 0; j < this.grid[i].length; j++) {
                     if (!this.grid[i][j].isStart() && !this.grid[i][j].isFinish()) {
                         if (i % 2 == 0 && j % 2 != 0) {
-                            this.grid[i][j].setWall(true);
+                            this.grid[i][j].setWallNode(true);
                         }
                         if (i % 2 == 0) {
-                            this.grid[i][j].setWall(true);
+                            this.grid[i][j].setWallNode(true);
                         }
                         if (j % 2 == 0) {
-                            this.grid[i][j].setWall(true);
+                            this.grid[i][j].setWallNode(true);
                         }
                     }
                 }
             }
         for (int i = 0; i < this.grid.length-1; i++) {
-            this.grid[i][this.grid[i].length-1].setWall(true);
+            this.grid[i][this.grid[i].length-1].setWallNode(true);
         }
-        System.out.println("rows: " + this.grid.length); // rows
-        System.out.println("cols: " + this.grid[0].length); // columns
-        System.out.println();
-//        recur(this.grid[1][1]);
     }
 
-//    private void recur(MyNode node) {
-//        node.setVisited(true);
-//        MyNode neighbor = this.getNeighbors(node);
-//        while (neighbor != null) {
-//            updateGraph();
-//            this.getWallBetween(node, neighbor);
-//            recur(neighbor);
-//        }
-//    }
-
-    private void updateGraph() {
-        this.graph.getChildren().clear();
+    private void cleanNodes() {
         for (int i = 0; i < this.grid.length; i++) {
             for (int j = 0; j < this.grid[i].length; j++) {
-                this.graph.getChildren().addAll(this.grid[i][j]);
+                this.grid[i][j].setVisited(false);
+                if (!this.grid[i][j].isWallNode()) {
+                    colorMazeNode(this.grid[i][j], this.startNode, this.finishNode, duration, this.stran, Color.GRAY);
+                } else {
+                    colorMazeNode(this.grid[i][j], this.startNode, this.finishNode, duration, this.stran, Color.BLACK);
+                }
+            }
+        }
+    }
+
+    private void fillWalls() {
+        for (int i = 0; i < this.grid.length; i++) {
+            for (int j = 0; j < this.grid[i].length; j++) {
+                if (this.grid[i][j].isWallNode()) {
+                    this.grid[i][j].setWall(true);
+                }
             }
         }
     }
 
     private void start() {
 
-        List<MyNode> unvisitedNodes = new ArrayList<>();
-        for (int i = 0; i < this.grid.length-1; i++) {
-            for (int j = 0; j < this.grid[i].length-1; j++) {
-                if (!this.grid[i][j].isWall()) {
-                    unvisitedNodes.add(this.grid[i][j]);
-                }
-            }
-        }
-
         MyNode current = this.grid[1][1];
         current.setVisited(true);
-//        unvisitedNodes.remove(current);
 
         this.stack.push(current);
-        while (!this.stack.isEmpty()) {  // !this.unvisitedNodes.isEmpty()
-//            if (!this.stack.isEmpty()) {
+        while (!this.stack.isEmpty()) {
                 current = this.stack.pop();
-//            } else {
-//                current = this.unvisitedNodes.remove((int)(Math.random()*this.unvisitedNodes.size()));
-//            }
             MyNode neighbor = this.getNeighbors(current);
-//            Platform.runLater(this::updateGraph);
             if (neighbor != null) {
+                colorNode(neighbor, this.startNode, this.finishNode, duration, this.stran, Color.YELLOW);
                 neighbor.setVisited(true);
-//                this.stack.push(current);
                 this.getWallBetween(current, neighbor);
                 neighbor.setVisited(true);
                 this.stack.push(neighbor);
-//                clearPath(neighbor);
-//                MyNode wall = getWallBetween(current, neighbor);
-//                assert wall != null;
-//                wall.setWall(true);
-//                wall.setVisited(true);
-//                wall.setFill(Color.BLACK);
-
-//                this.unvisitedNodes.remove(neighbor);
-//                colorNode(neighbor, this.startNode, this.finishNode, duration, this.stran, Color.BLUE);
-//                current = neighbor;
-//                current.setWall(false);
-//                current.setVisited(true);
-//                current.setFill(Color.BLACK);
-
-//                unvisitedNodes.remove(current);
             }
             else if (!this.stack.isEmpty()){ //
                 current = this.stack.pop();
@@ -156,19 +130,15 @@ public class MazeGenerator {
         List<MyNode> neighbors = new ArrayList<>();
 
         if (_node.getRow() > 1) {
-            this.grid[_node.getRow()-2][_node.getCol()].setEast(true);
             temp.add(this.grid[_node.getRow()-2][_node.getCol()]);
         }
         if (_node.getRow() < this.grid.length-2) {
-            this.grid[_node.getRow()+2][_node.getCol()].setWest(true);
             temp.add(this.grid[_node.getRow()+2][_node.getCol()]);
         }
         if (_node.getCol() > 1) {
-            this.grid[_node.getRow()][_node.getCol()-2].setSouth(true);
             temp.add(this.grid[_node.getRow()][_node.getCol()-2]);
         }
         if (_node.getCol() < this.grid[0].length-2) {
-            this.grid[_node.getRow()][_node.getCol()+2].setNorth(true);
             temp.add(this.grid[_node.getRow()][_node.getCol()+2]);
         }
 
@@ -177,6 +147,7 @@ public class MazeGenerator {
 
                 neighbors.add(node);
                 this.stack.push(node);
+                colorNode(node, this.startNode, this.finishNode, duration, this.stran, Color.BLUE);
             }
         });
 
@@ -200,17 +171,17 @@ public class MazeGenerator {
         int y = y1 - y2;
 
         if (x == 2) {
-            this.grid[y1][x1 - 1].setWall(false);
-//            this.grid[y1][x1 - 1].setVisited(true);
+            this.grid[y1][x1 - 1].setWallNode(false);
+            colorMazeNode(this.grid[y1][x1 - 1], this.startNode, this.finishNode, duration, this.stran, Color.GRAY);
         } else if (x == -2) {
-            this.grid[y1][x1 + 1].setWall(false);
-//            this.grid[y1][x1 + 1].setVisited(true);
+            this.grid[y1][x1 + 1].setWallNode(false);
+            colorMazeNode(this.grid[y1][x1 + 1], this.startNode, this.finishNode, duration, this.stran, Color.GRAY);
         } else if (y == 2) {
-            this.grid[y1 - 1][x1].setWall(false);
-//            this.grid[y1 - 1][x1].setVisited(true);
+            this.grid[y1 - 1][x1].setWallNode(false);
+            colorMazeNode(this.grid[y1 - 1][x1], this.startNode, this.finishNode, duration, this.stran, Color.GRAY);
         } else if (y == -2) {
-            this.grid[y1 + 1][x1].setWall(false);
-//            this.grid[y1 + 1][x1].setVisited(true);
+            this.grid[y1 + 1][x1].setWallNode(false);
+            colorMazeNode(this.grid[y1 + 1][x1], this.startNode, this.finishNode, duration, this.stran, Color.GRAY);
         }
     }
 
@@ -235,13 +206,13 @@ public class MazeGenerator {
             for (int j = 0; j < this.grid[i].length; j++) {
                 if (!this.grid[i][j].isStart() && !this.grid[i][j].isFinish()) {
                     if (i % 2 == 0 || j % 2 == 0) {
-                        this.grid[i][j].setWall(true);
+                        this.grid[i][j].setWallNode(true);
 //                    colorNode(_grid[i][j], this.startNode, this.finishNode, duration, this.stran, Color.BLACK);
                     }
                     double rand1 = Math.random()*this.grid.length;
                     double rand2 = Math.random()*this.grid[0].length;
                     if (j % 2 != 0 || i % 2 != 0 && rand1 > this.grid.length/2 && rand2 > this.grid[0].length/2) {
-                        this.grid[i][j].setWall(false);
+                        this.grid[i][j].setWallNode(false);
 //                    colorNode(_grid[i][j], this.startNode, this.finishNode, duration, this.stran, Color.BLACK);
                     }
                 }
