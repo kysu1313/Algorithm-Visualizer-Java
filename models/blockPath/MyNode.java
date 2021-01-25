@@ -23,7 +23,7 @@ public class MyNode extends Rectangle {
     private boolean west;
     private boolean north;
     private boolean south;
-    private boolean isPath;
+    private boolean isWallNode;
     private MyNode parent;
     private Color color;
     private String backgroundColor;
@@ -61,10 +61,6 @@ public class MyNode extends Rectangle {
         this.isVisited = false;
         this.isStart = false;
         this.isFinish = false;
-        this.east = false;
-        this.west = false;
-        this.north = false;
-        this.south = false;
         this.parent = null;
         this.fCost = 0;
         this.gCost = 0;
@@ -102,12 +98,12 @@ public class MyNode extends Rectangle {
         }
     }
 
-    public boolean isPath() {
-        return isPath;
+    public boolean isWallNode() {
+        return isWallNode;
     }
 
-    public void setPath(boolean path) {
-        isPath = path;
+    public void setWallNode(boolean path) {
+        isWallNode = path;
     }
 
     public boolean[] getWalls() {
@@ -124,38 +120,6 @@ public class MyNode extends Rectangle {
 
     public void setBackgroundColor(String backgroundColor) {
         this.backgroundColor = backgroundColor;
-    }
-
-    public boolean isEast() {
-        return east;
-    }
-
-    public void setEast(boolean east) {
-        this.east = east;
-    }
-
-    public boolean isWest() {
-        return west;
-    }
-
-    public void setWest(boolean west) {
-        this.west = west;
-    }
-
-    public boolean isNorth() {
-        return north;
-    }
-
-    public void setNorth(boolean north) {
-        this.north = north;
-    }
-
-    public boolean isSouth() {
-        return south;
-    }
-
-    public void setSouth(boolean south) {
-        this.south = south;
     }
 
     public int getRow() {

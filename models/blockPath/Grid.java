@@ -99,6 +99,15 @@ public class Grid {
         }
     }
 
+    static void colorMazeNode(MyNode _node, MyNode _startNode, MyNode _finishNode, int _duration, SequentialTransition _stran, Color _color) {
+        if (_node != _startNode && _node != _finishNode && !_node.isWallNode()) {
+            _stran.getChildren().add(Grid.createFill(_node, _duration, Color.GRAY, _color));
+        }
+        else if (_node != _startNode && _node != _finishNode && _node.isWallNode()) {
+            _stran.getChildren().add(Grid.createFill(_node, _duration, Color.BLACK, _color));
+        }
+    }
+
     static FillTransition createFill(MyNode _node, int _duration, Color _fromColor, Color _toColor) {
         FillTransition tran = new FillTransition(Duration.millis(_duration), _node);
 //        tran.setFromValue(_fromColor);
