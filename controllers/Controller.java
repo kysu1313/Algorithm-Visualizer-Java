@@ -359,7 +359,7 @@ public class Controller implements Initializable {
         if (null == this.nodes) {
             makeGrid();
         }
-        MazeGenerator maze = new MazeGenerator(this.nodes, this.startNode, this.finishNode, this.graph);
+        MazeGenerator maze = new MazeGenerator(this.nodes, this.startNode, this.finishNode, true);
         maze.verticalMaze();
     }
 
@@ -367,7 +367,7 @@ public class Controller implements Initializable {
         if (null == this.nodes) {
             makeGrid();
         }
-        MazeGenerator maze = new MazeGenerator(this.nodes, this.startNode, this.finishNode, this.graph);
+        MazeGenerator maze = new MazeGenerator(this.nodes, this.startNode, this.finishNode, false);
     }
 
     public void handleStartPathFinding(ActionEvent event) {
@@ -378,6 +378,9 @@ public class Controller implements Initializable {
             boolean horiz = false;
             if (this.allowHorizontals.isSelected()) {
                 horiz = true;
+            }
+            if (null == selectedGridSort) {
+                selectedGridSort = "Dijkstras";
             }
 
             switch (selectedGridSort) {

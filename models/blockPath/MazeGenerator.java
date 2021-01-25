@@ -25,14 +25,12 @@ public class MazeGenerator {
     private MyNode tempStart;
     private SequentialTransition stran;
     private SequentialTransition postStran;
-    private AnchorPane graph;
-    private int duration = 15;
+    private int duration = 8;
 
-    public MazeGenerator(MyNode[][] _grid, MyNode _startNode, MyNode _finishNode, AnchorPane grid) {
+    public MazeGenerator(MyNode[][] _grid, MyNode _startNode, MyNode _finishNode, boolean _type) {
         this.grid = _grid;
         this.startNode = _startNode;
         this.finishNode = _finishNode;
-        this.graph = grid;
         this.unvisitedNodes = new LinkedList<>();
         this.unvisitedNodes = getNodes(this.grid);
         this.stack = new Stack<>();
@@ -40,16 +38,20 @@ public class MazeGenerator {
         this.postStran = new SequentialTransition();
         this.tempStart = this.grid[0][0];
 
-        makeMaze();
-        start();
-        cleanNodes();
-        this.stran.play();
-        this.stran.setOnFinished(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                fillWalls();
-            }
-        });
+        if (_type) {
+            verticalMaze();
+        } else {
+            makeMaze();
+            start();
+            cleanNodes();
+            this.stran.play();
+            this.stran.setOnFinished(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    fillWalls();
+                }
+            });
+        }
     }
 
     public void makeMaze() {
@@ -75,13 +77,14 @@ public class MazeGenerator {
     }
 
     private void cleanNodes() {
+        this.duration = 3;
         for (int i = 0; i < this.grid.length; i++) {
             for (int j = 0; j < this.grid[i].length; j++) {
                 this.grid[i][j].setVisited(false);
                 if (!this.grid[i][j].isWallNode()) {
-                    colorMazeNode(this.grid[i][j], this.startNode, this.finishNode, duration, this.stran, Color.GRAY);
+                    colorMazeNode(this.grid[i][j], this.startNode, this.finishNode, this.duration, this.stran, Color.GRAY);
                 } else {
-                    colorMazeNode(this.grid[i][j], this.startNode, this.finishNode, duration, this.stran, Color.BLACK);
+                    colorMazeNode(this.grid[i][j], this.startNode, this.finishNode, this.duration, this.stran, Color.BLACK);
                 }
             }
         }
@@ -206,13 +209,13 @@ public class MazeGenerator {
             for (int j = 0; j < this.grid[i].length; j++) {
                 if (!this.grid[i][j].isStart() && !this.grid[i][j].isFinish()) {
                     if (i % 2 == 0 || j % 2 == 0) {
-                        this.grid[i][j].setWallNode(true);
+                        this.grid[i][j].setWall(true);
 //                    colorNode(_grid[i][j], this.startNode, this.finishNode, duration, this.stran, Color.BLACK);
                     }
                     double rand1 = Math.random()*this.grid.length;
                     double rand2 = Math.random()*this.grid[0].length;
                     if (j % 2 != 0 || i % 2 != 0 && rand1 > this.grid.length/2 && rand2 > this.grid[0].length/2) {
-                        this.grid[i][j].setWallNode(false);
+                        this.grid[i][j].setWall(false);
 //                    colorNode(_grid[i][j], this.startNode, this.finishNode, duration, this.stran, Color.BLACK);
                     }
                 }
