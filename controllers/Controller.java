@@ -85,8 +85,6 @@ public class Controller implements Initializable {
     private ObservableMap<String, String> observableGridMap;
     private int cols, rows;
 
-    private final int GRID_COLS = 50, START_ROW = 3, START_COL = 3, FINISH_ROW = 40, FINISH_COL = 40;
-
 
     // Graph Events
     public void onGraphPressed(MouseEvent mouseEvent) {
@@ -132,6 +130,10 @@ public class Controller implements Initializable {
 
     }
 
+    /**
+     * Clear all anchor panes
+     * @param event
+     */
     public void handleClear(ActionEvent event) {
         if (!this.graph.getChildren().isEmpty()) {
             this.graph.getChildren().clear();
@@ -146,15 +148,26 @@ public class Controller implements Initializable {
 
 
     // Vertex Events
+
+    /**
+     * Used to determine when a vertex has been clicked.
+     * @param mouseEvent
+     * @param vertex
+     */
     private void onVertexPressed(MouseEvent mouseEvent, Vertex vertex) {
         if (mouseEvent.isPrimaryButtonDown()) {
             vertex1 = vertex;
         } else if (mouseEvent.isSecondaryButtonDown()) {
             vertexDelete = vertex;
         }
-//        this.vertexDelete = vertex;
     }
 
+
+    /**
+     * Used to determine when a vertex has been dragged.
+     * @param mouseEvent
+     * @param vertex
+     */
     private void onVertexDragDetected(MouseEvent mouseEvent, Vertex vertex) {
         vertex.toFront();
         if (mouseEvent.isPrimaryButtonDown()) {
@@ -168,7 +181,6 @@ public class Controller implements Initializable {
         } else if (mouseEvent.isSecondaryButtonDown()) {
             this.vertexDelete = null;
             if (this.vertex2 != null) {
-//                this.vertex2.getStyleClass().add("dragged");
                 for (Arrow a : vertex2.edges) {
                     a.getStyleClass().add("dragged");
                 }
@@ -176,6 +188,11 @@ public class Controller implements Initializable {
         }
     }
 
+    /**
+     * Once a vertex has been dragged, compute the new X Y location.
+     * @param e
+     * @param vertex
+     */
     private void onVertexDragged(MouseEvent e, Vertex vertex) {
         if (vertex2 != null) {
             vertex2.setLayoutX(vertex.getLayoutX() + e.getX() + vertex.getTranslateX());
@@ -188,6 +205,11 @@ public class Controller implements Initializable {
 
     }
 
+    /**
+     * Stop drag event.
+     * @param mouseEvent
+     * @param vertex
+     */
     private void onVertexReleased(MouseEvent mouseEvent, Vertex vertex) {
         vertex.getStyleClass().remove("dragged");
         for (Arrow a : vertex.edges) {
@@ -209,6 +231,13 @@ public class Controller implements Initializable {
 
 
     // Helper Methods
+
+    /**
+     * Applies action events to each new vertex.
+     * @param x
+     * @param y
+     * @return
+     */
     private Vertex createAndAddVertex(Double x, Double y) {
         Vertex vertex = new Vertex(x, y);
 
@@ -228,6 +257,13 @@ public class Controller implements Initializable {
         return vertex;
     }
 
+
+    /**
+     * Add arrow between two vertices.
+     * @param v1
+     * @param v2
+     * @return
+     */
     private Arrow createAndAddArrow(Vertex v1, Vertex v2) {
         Arrow arrow = new Arrow(v1.getLayoutX(), v1.getLayoutY(), v2.getLayoutX(), v2.getLayoutY());
         arrow.x1Property().bind(v1.layoutXProperty());
@@ -243,6 +279,11 @@ public class Controller implements Initializable {
         return arrow;
     }
 
+    /**
+     * Start button handler for binary tree and path-finding algorithms.
+     * @param event
+     * @throws InterruptedException
+     */
     public void handleStart(ActionEvent event) throws InterruptedException {
         if (this.tabPane.getSelectionModel().getSelectedItem() == this.gridTab) {
             if (null == this.nodes) {
@@ -275,6 +316,10 @@ public class Controller implements Initializable {
 
     }
 
+    /**
+     * Handle sort button for sort graph. Uses sorting algorithms.
+     * @param event
+     */
     public void handleSort(ActionEvent event) {
         if (null != this.selectedSort) {
             if (null == this.rects) {
@@ -310,10 +355,17 @@ public class Controller implements Initializable {
         }
     }
 
+    /**
+     * Create bars used in sorting algorithms.
+     * @param event
+     */
     public void handleMakeBars(ActionEvent event) {
         makeBars();
     }
 
+    /**
+     * Allow user input to specify the number of columns in a grid.
+     */
     private void updateColumns() {
         EventHandler<ActionEvent> columnEvent = new EventHandler<ActionEvent>() {
             @Override
@@ -325,6 +377,9 @@ public class Controller implements Initializable {
         numColumns.setOnAction(columnEvent);
     }
 
+    /**
+     * Create new grid for path-finding and maze-building.
+     */
     private void makeGrid() {
         this.graph.getChildren().clear();
         Grid grid = new Grid(this.cols, this.graph);
@@ -346,6 +401,10 @@ public class Controller implements Initializable {
         }
     }
 
+    /**
+     * Handles make grid button event.
+     * @param event
+     */
     public void handleMakeGrid(ActionEvent event) {
         if (!this.numColumns.getText().isEmpty()){
             this.cols = Integer.parseInt(this.numColumns.getText());
@@ -355,6 +414,10 @@ public class Controller implements Initializable {
         makeGrid();
     }
 
+    /**
+     * Creates a new vertical maze.
+     * @param event
+     */
     public void handleGenerateVerticalMaze(ActionEvent event) {
         if (null == this.nodes) {
             makeGrid();
@@ -363,6 +426,10 @@ public class Controller implements Initializable {
         maze.verticalMaze();
     }
 
+    /**
+     * Creates a new default maze.
+     * @param event
+     */
     public void handleGenerateMaze(ActionEvent event) {
         if (null == this.nodes) {
             makeGrid();
@@ -370,6 +437,10 @@ public class Controller implements Initializable {
         MazeGenerator maze = new MazeGenerator(this.nodes, this.startNode, this.finishNode, false);
     }
 
+    /**
+     * Begins the selected path-finding algorithm on current grid.
+     * @param event
+     */
     public void handleStartPathFinding(ActionEvent event) {
         if (this.tabPane.getSelectionModel().getSelectedItem() == this.gridTab) {
             if (null == this.nodes) {
@@ -404,6 +475,10 @@ public class Controller implements Initializable {
         }
     }
 
+    /**
+     * Allows the creation of walls in the grid.
+     * @param _node
+     */
     private void nodeAction(MyNode _node) {
         _node.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
